@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Edineu World Mobile</title>
+    <style>
+        :root { --main: #191b1d; --accent: #00b06f; }
+        body { 
+            margin: 0; background: #0a0b0d; color: white; 
+            font-family: sans-serif; overflow-x: hidden;
+            display: flex; flex-direction: column; height: 100vh;
+        }
+        
+        /* Header Fixo para Celular */
+        .mobile-header { 
+            background: var(--main); padding: 15px; 
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .tbux-counter { color: #ffcc00; font-weight: bold; font-size: 14px; }
+
+        /* Área do Jogo / Conteúdo */
+        #game-area { 
+            flex: 1; position: relative; background: #111; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+
+        /* O Personagem (Cápsula) */
+        #player { 
+            width: 40px; height: 70px; background: var(--accent); 
+            border-radius: 20px; border: 2px solid white;
+            position: absolute; bottom: 100px; left: 50%;
+            transform: translateX(-50%); transition: 0.1s;
+        }
+
+        /* Controles de Toque (Crucial para Celular) */
+        .controls { 
+            height: 120px; background: #191b1d; display: flex; 
+            justify-content: space-around; align-items: center;
+            border-top: 1px solid #333;
+        }
+        
+        .btn-touch { 
+            width: 70px; height: 70px; background: #333; 
+            border-radius: 50%; border: none; color: white; 
+            font-size: 24px; font-weight: bold;
+            -webkit-user-select: none; /* Impede de selecionar texto ao tocar */
+        }
+        .btn-touch:active { background: var(--accent); }
+
+        .btn-buy {
+            background: #ffcc00; color: black; border: none;
+            padding: 10px 20px; border-radius: 5px; font-weight: bold;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mobile-header">
+        <div style="font-weight: 900;">EDINEU<span>HUB</span></div>
+        <div class="tbux-counter">🟡 <span id="val">0</span> TBUX</div>
+    </div>
+
+    <div id="game-area">
+        <button class="btn-buy" onclick="addTbux()">COMPRAR TBUX (R$ 0,99)</button>
+        <p id="msg" style="font-size: 12px; color: #888;">Use os botões abaixo para jogar</p>
+        <div id="player"></div>
+        <div style="width:100%; height:20px; background:#333; position:absolute; bottom:80px;"></div>
+    </div>
+
+    <div class="controls">
+        <button class="btn-touch" onclick="move(-30)">◀</button>
+        <button class="btn-touch" onclick="jump()" style="background:var(--accent)">▲</button>
+        <button class="btn-touch" onclick="move(30)">▶</button>
+    </div>
+
+<script>
+    let tbux = 0;
+    let posX = window.innerWidth / 2;
+    let isJumping = false;
+
+    function move(dir) {
+        const p = document.getElementById('player');
+        posX += dir;
+        
+        // Limite da tela para não sumir no celular
+        if(posX < 30) posX = 30;
+        if(posX > window.innerWidth - 30) posX = window.innerWidth - 30;
+        
+        p.style.left = posX + "px";
+    }
+
+    function jump() {
+        if(isJumping) return;
+        isJumping = true;
+        const p = document.getElementById('player');
+        p.style.bottom = "180px";
+        setTimeout(() => {
+            p.style.bottom = "100px";
+            isJumping = false;
+        }, 400);
+    }
+
+    function addTbux() {
+        if(confirm("Confirmar PIX de R$ 0,99 para 1000 TBUX?")) {
+            tbux += 1000;
+            document.getElementById('val').innerText = tbux;
+            document.getElementById('msg').innerText = "TBUX creditado na conta de Edineu!";
+        }
+    }
+</script>
+
+</body>
+</html>
